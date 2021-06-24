@@ -2,28 +2,53 @@
 using Xunit;
 using MetricsAgent.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using MetricsAgent.Repository;
+using MetricsAgent.MetricsTable;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.MetricsRequest;
+
 
 namespace MetricsManagerTests
 {
     public class NetworkMetricsControllerUnitTests
     {
         private NetworkMetricsController controller;
+        private Mock<INetworkMetricsRepository> mock;
+        private Mock<ILogger<NetworkMetricsController>> logger;
 
         public NetworkMetricsControllerUnitTests()
         {
-            controller = new NetworkMetricsController();
+            mock = new Mock<INetworkMetricsRepository>();
+            logger = new Mock<ILogger<NetworkMetricsController>>();
+            controller = new NetworkMetricsController(logger.Object, mock.Object);
+
         }
         [Fact]
         public void GetMetrics_ReturnsOk()
         {
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
 
-            var result = controller.GetMetrics(agentId, fromTime, toTime);
+            var fromTime = DateTimeOffset.Now;
+            var toTime = DateTimeOffset.Now;
 
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            mock.Setup(repository => repository.GetByTimePeriod(fromTime, toTime));
+
+            var result = controller.GetMetrics(fromTime, toTime);
+
+            mock.Verify(repository => repository.GetByTimePeriod(fromTime, toTime));
         }
+
+        [Fact]
+        public void Create_ShouldCall_Create_From_Repository()
+        {
+
+            mock.Setup(repository => repository.Create(It.IsAny<NetworkMetrics>())).Verifiable();
+
+            var result = controller.Create(new MetricsAgent.MetricsRequest.NetworkMetricsCreateRequest { Time = DateTimeOffset.Now, Value = 50 });
+
+            mock.Verify(repository => repository.Create(It.IsAny<NetworkMetrics>()), Times.AtMostOnce());
+        }
+
 
     }
 }

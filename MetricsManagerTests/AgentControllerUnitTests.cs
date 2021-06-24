@@ -2,16 +2,22 @@
 using Xunit;
 using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
+
 
 namespace MetricsManagerTests
 {
     public class AgentsControllerUnitTests
     {
+        private Mock<ILogger<AgentsController>> logger;
         private AgentsController controller;
+        
 
         public AgentsControllerUnitTests()
         {
-            controller = new AgentsController();
+            logger = new Mock<ILogger<AgentsController>>();
+            controller = new AgentsController(logger.Object);  
         }
         [Fact]
         public void RegistrAgent_ReturnsOk()

@@ -2,28 +2,53 @@
 using Xunit;
 using MetricsAgent.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
+using MetricsAgent.Repository;
+using MetricsAgent.MetricsTable;
+using Microsoft.Extensions.Logging;
+using MetricsAgent.MetricsRequest;
+
 
 namespace MetricsManagerTests
 {
     public class RamMetricsControllerUnitTests
     {
         private RamMetricsController controller;
+        private Mock<IRamMetricsRepository> mock;
+        private Mock<ILogger<RamMetricsController>> logger;
 
         public RamMetricsControllerUnitTests()
         {
-            controller = new RamMetricsController();
+            mock = new Mock<IRamMetricsRepository>();
+            logger = new Mock<ILogger<RamMetricsController>>();
+            controller = new RamMetricsController(logger.Object, mock.Object);
+
         }
         [Fact]
         public void GetMetrics_ReturnsOk()
         {
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
 
-            var result = controller.GetMetrics(agentId, fromTime, toTime);
+            var fromTime = DateTimeOffset.Now;
+            var toTime = DateTimeOffset.Now;
 
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            mock.Setup(repository => repository.GetByTimePeriod(fromTime, toTime));
+
+            var result = controller.GetMetrics(fromTime, toTime);
+
+            mock.Verify(repository => repository.GetByTimePeriod(fromTime, toTime));
         }
+
+        [Fact]
+        public void Create_ShouldCall_Create_From_Repository()
+        {
+
+            mock.Setup(repository => repository.Create(It.IsAny<RamMetrics>())).Verifiable();
+
+            var result = controller.Create(new MetricsAgent.MetricsRequest.RamMetricsCreateRequest { Time = DateTimeOffset.Now, Value = 50 });
+
+            mock.Verify(repository => repository.Create(It.IsAny<RamMetrics>()), Times.AtMostOnce());
+        }
+
 
     }
 }
