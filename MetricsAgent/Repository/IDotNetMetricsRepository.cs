@@ -13,12 +13,11 @@ namespace MetricsAgent.Repository
 
     public class DotNetMetricsRepository : IDotNetMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+        private readonly ConnectionManager _manager = new ConnectionManager();
 
         public void Create(DotNetMetrics item)
         {
-            using var connection = new SQLiteConnection(ConnectionString);
-            connection.Open();
+            using var connection = _manager.CreateOpenConnection();
 
             using var cmd = new SQLiteCommand(connection);
             cmd.CommandText = "INSERT INTO dotnetmetrics(value, time) VALUES(@value, @time)";
@@ -30,8 +29,7 @@ namespace MetricsAgent.Repository
 
         public IList<DotNetMetrics> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)
         {
-            using var connection = new SQLiteConnection(ConnectionString);
-            connection.Open();
+            using var connection = _manager.CreateOpenConnection();
 
             using var cmd = new SQLiteCommand(connection);
             cmd.CommandText = "SELECT * FROM dotnetmetrics WHERE (time >= @from) AND (time =< @to)";

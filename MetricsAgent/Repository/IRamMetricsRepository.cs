@@ -13,12 +13,11 @@ namespace MetricsAgent.Repository
 
     public class RamMetricsRepository : IRamMetricsRepository
     {
-        private const string ConnectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+        private readonly ConnectionManager _manager = new ConnectionManager();
 
         public void Create(RamMetrics item)
         {
-            using var connection = new SQLiteConnection(ConnectionString);
-            connection.Open();
+            using var connection = _manager.CreateOpenConnection();
 
             using var cmd = new SQLiteCommand(connection);
             cmd.CommandText = "INSERT INTO rammetrics(value, time) VALUES(@value, @time)";
@@ -30,8 +29,7 @@ namespace MetricsAgent.Repository
 
         public IList<RamMetrics> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)
         {
-            using var connection = new SQLiteConnection(ConnectionString);
-            connection.Open();
+            using var connection = _manager.CreateOpenConnection();
 
             using var cmd = new SQLiteCommand(connection);
             cmd.CommandText = "SELECT * FROM rammetrics WHERE (time >= @from) AND (time =< @to)";
