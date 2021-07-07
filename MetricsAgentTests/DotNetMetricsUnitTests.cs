@@ -7,6 +7,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.MetricsRequest;
+using AutoMapper;
 
 namespace MetricsManagerTests
 {
@@ -15,12 +16,13 @@ namespace MetricsManagerTests
         private DotNetMetricsController controller;
         private Mock<IDotNetMetricsRepository> mock;
         private Mock<ILogger<DotNetMetricsController>> logger;
+        private IMapper mapper;
 
         public DotNetMetricsControllerUnitTests()
         {
             mock = new Mock<IDotNetMetricsRepository>();
             logger = new Mock<ILogger<DotNetMetricsController>>();
-            controller = new DotNetMetricsController(logger.Object, mock.Object);
+            controller = new DotNetMetricsController(logger.Object, mock.Object, mapper);
         }
         [Fact]
         public void GetMetrics_ReturnsOk()

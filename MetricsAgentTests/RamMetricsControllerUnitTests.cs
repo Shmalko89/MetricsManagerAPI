@@ -7,6 +7,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.MetricsRequest;
+using AutoMapper;
 
 
 namespace MetricsManagerTests
@@ -16,12 +17,13 @@ namespace MetricsManagerTests
         private RamMetricsController controller;
         private Mock<IRamMetricsRepository> mock;
         private Mock<ILogger<RamMetricsController>> logger;
+        private IMapper mapper;
 
         public RamMetricsControllerUnitTests()
         {
             mock = new Mock<IRamMetricsRepository>();
             logger = new Mock<ILogger<RamMetricsController>>();
-            controller = new RamMetricsController(logger.Object, mock.Object);
+            controller = new RamMetricsController(logger.Object, mock.Object, mapper);
 
         }
         [Fact]
