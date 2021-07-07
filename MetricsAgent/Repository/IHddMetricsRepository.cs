@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using MetricsAgent.MetricsTable;
+using Dapper;
+using MetricsAgent.Handler;
+using System.Linq;
 
 namespace MetricsAgent.Repository
 {
@@ -15,40 +18,33 @@ namespace MetricsAgent.Repository
     {
         private readonly ConnectionManager _manager = new ConnectionManager();
 
+        public HddMetricsRepository()
+        {
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
+        }
         public void Create(HddMetrics item)
         {
             using var connection = _manager.CreateOpenConnection();
 
-            using var cmd = new SQLiteCommand(connection);
-            cmd.CommandText = "INSERT INTO hddmetrics(value, time) VALUES(@value, @time)";
-            cmd.Parameters.AddWithValue("@value", item.Value);
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+            connection.Execute("INSERT INTO hddmetrics(value, time) VALUES(@value, @time)",
+                new
+                {
+                    value = item.Value,
+                    time = item.Time.ToUnixTimeSeconds()
+                });
+
         }
 
         public IList<HddMetrics> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)
         {
             using var connection = _manager.CreateOpenConnection();
-
-            using var cmd = new SQLiteCommand(connection);
-            cmd.CommandText = "SELECT * FROM hddmetrics WHERE (time >= @from) AND (time =< @to)";
-
-            var returnList = new List<HddMetrics>();
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
+            return connection.Query<HddMetrics>("SELECT * FROM hddmetrics WHERE (time >= @from) AND (time =< @to)",
+            new
             {
-                while (reader.Read())
-                {
-                    returnList.Add(new HddMetrics
-                    {
-                        Id = reader.GetInt32(0),
-                        Value = reader.GetInt32(1),
-                        Time = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt32(2))
-                    });
-                }
-            }
-            return returnList;
+                from = from.ToUnixTimeSeconds(),
+                to = to.ToUnixTimeSeconds()
+            }).ToList();
+
         }
     }
 }
