@@ -11,15 +11,15 @@ using MetricsManager.Request;
 
 namespace MetricsAgent.Jobs
 {
-    public class ManagerCpuMetricJob : IJob
+    public class ManagerHddMetricJob : IJob
     {
-        private ManagerCpuMetricsRepository _repository;
+        private ManagerHddMetricsRepository _repository;
         private IMetricsAgentClient _agentclient;
         private IAgentRepository _agentRepository;
         private IMapper _mapper;
         private AgentInfo _agentInfo;
 
-        public ManagerCpuMetricJob(ManagerCpuMetricsRepository repository, IMetricsAgentClient agentClient, IAgentRepository agentRepository, IMapper mapper, AgentInfo agentInfo)
+        public ManagerHddMetricJob(ManagerHddMetricsRepository repository, IMetricsAgentClient agentClient, IAgentRepository agentRepository, IMapper mapper, AgentInfo agentInfo)
         {
             _repository = repository;
             _agentclient = agentClient;
@@ -30,11 +30,11 @@ namespace MetricsAgent.Jobs
 
         public Task Execute(IJobExecutionContext context)
         {
-            var startTime = _repository.CpuMetricsMaxDate();
+            var startTime = _repository.HddMetricsMaxDate();
             var lasttime = DateTimeOffset.UtcNow;
             var Url = _agentInfo.AgentAddress;
 
-            _agentclient.GetAllCpuMetrics(new AllCpuMetricsApiRequest { AgentUrl = Url, from = startTime, to = lasttime });
+            _agentclient.GetAllHddMetrics(new AllHddMetricsApiRequest { AgentUrl = Url, from = startTime, to = lasttime });
 
             return Task.CompletedTask;
         }
