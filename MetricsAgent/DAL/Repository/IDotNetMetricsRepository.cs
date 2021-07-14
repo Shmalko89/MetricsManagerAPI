@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MetricsAgent.Repository
 {
-    public interface IDotNetMetricsRepository : IRepositpry<DotNetMetrics>
+    public interface IDotNetMetricsRepository : IRepository<DotNetMetrics>
     {
 
     }

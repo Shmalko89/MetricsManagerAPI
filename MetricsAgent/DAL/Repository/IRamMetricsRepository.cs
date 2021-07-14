@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MetricsAgent.Repository
 {
-    public interface IRamMetricsRepository : IRepositpry<RamMetrics>
+    public interface IRamMetricsRepository : IRepository<RamMetrics>
     {
 
     }

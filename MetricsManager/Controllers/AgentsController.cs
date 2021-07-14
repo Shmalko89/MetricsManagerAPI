@@ -48,6 +48,7 @@ namespace MetricsManager.Controllers
     {
         public int AgentId { get; }
         public Uri AgentAddress { get; }
+        public bool IsEnabled { get; set; }
 
     }
 
