@@ -7,6 +7,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.MetricsRequest;
+using AutoMapper;
 
 
 namespace MetricsManagerTests
@@ -16,12 +17,13 @@ namespace MetricsManagerTests
         private CpuMetricsController controller;
         private Mock<ICpuMetricsRepository> mock;
         private Mock<ILogger<CpuMetricsController>> logger;
+        private IMapper mapper;
 
         public CpuMetricsControllerUnitTests()
         {
             mock = new Mock<ICpuMetricsRepository>();
             logger = new Mock<ILogger<CpuMetricsController>>();
-            controller = new CpuMetricsController(logger.Object, mock.Object);
+            controller = new CpuMetricsController(logger.Object, mock.Object, mapper);
 
         }
         [Fact]
