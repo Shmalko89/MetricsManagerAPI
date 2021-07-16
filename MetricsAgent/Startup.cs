@@ -42,7 +42,7 @@ namespace MetricsAgent
             {
                 c.SwaggerDoc("v2", new OpenApiInfo
                 {
-                    Version = "v1",
+                    Version = "v2",
                     Title = "API сервиса агента сбора метрик",
                     Description = "Позволяет получать метрики комплектующих Вашего ПК",
                     TermsOfService = new Uri("https://example.com/terms"),
@@ -109,7 +109,7 @@ namespace MetricsAgent
                 {
                     app.UseDeveloperExceptionPage();
                     app.UseSwagger();
-                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API сервиса агента сбора метрик"));
+                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v2/swagger.json", "API сервиса агента сбора метрик"));
                 }
 
                 app.UseHttpsRedirection();
