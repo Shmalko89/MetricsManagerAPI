@@ -18,7 +18,7 @@ namespace MetricsAgent.Jobs
         public NetworkMetricJob(INetworkMetricsRepository repository)
         {
             _repository = repository;
-            _networkCounter = new PerformanceCounter("Network", "Bytes/sec", "_Total");
+            _networkCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", "_Total");
         }
 
         public Task Execute(IJobExecutionContext context)

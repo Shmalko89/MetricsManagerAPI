@@ -27,7 +27,7 @@ namespace MetricsManager.DAL.Repository
         public void Create(ManagerCpuMetrics item)
         {
             var connection = _manager.CreateOpenConnection();
-            connection.Execute("INSERT INTO managercpumetrics(AgentId, Value, Time) VALUES (@AgentId, @Value, @Time)",
+            connection.Execute("INSERT INTO managercpumetrics(agentId, value, time) VALUES (@AgentId, @Value, @Time)",
                 new
                 {
                     item.AgentId,
@@ -47,12 +47,13 @@ namespace MetricsManager.DAL.Repository
             }).ToList();
         }
 
-        public IList<ManagerCpuMetrics> GetByTimePeriodAgent(int AgentId, DateTimeOffset from, DateTimeOffset to)
+        public IList<ManagerCpuMetrics> GetByTimePeriodAgent(int agentId, DateTimeOffset from, DateTimeOffset to)
         {
             using var connection = _manager.CreateOpenConnection();
-            return connection.Query<ManagerCpuMetrics>("SELECT * FROM managercpumetrics WHERE (time >= @from) AND (time =< @to) AND (AgentId = 1)",
+            return connection.Query<ManagerCpuMetrics>("SELECT * FROM managercpumetrics WHERE (time >= @from) AND (time =< @to) AND (agentId = @AgentId)",
             new
             {
+                AgentId = agentId,
                 from = from.ToUnixTimeSeconds(),
                 to = to.ToUnixTimeSeconds()
 
