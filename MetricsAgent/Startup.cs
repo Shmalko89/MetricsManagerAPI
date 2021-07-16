@@ -38,6 +38,28 @@ namespace MetricsAgent
         {
             var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
             var mapper = mapperConfiguration.CreateMapper();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API сервиса агента сбора метрик",
+                    Description = "Позволяет получать метрики комплектующих Вашего ПК",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Shmalko",
+                        Email = string.Empty,
+                        Url = new Uri("https://shmalko.ru"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "GeekBrains 2021",
+                        Url = new Uri("https://gb.ru"),
+                    }
+                });
+            });
+                
             services.AddControllers();
             services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
@@ -87,7 +109,7 @@ namespace MetricsAgent
                 {
                     app.UseDeveloperExceptionPage();
                     app.UseSwagger();
-                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetricsAgent v1"));
+                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API сервиса агента сбора метрик"));
                 }
 
                 app.UseHttpsRedirection();
