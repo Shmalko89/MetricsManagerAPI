@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsManagerClient", "MetricsManagerClient\MetricsManagerClient.csproj", "{8CE92204-551E-4400-B498-F9A15BA22165}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{DD99B35E-9C2F-4335-AC0F-CA12EC61876C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD99B35E-9C2F-4335-AC0F-CA12EC61876C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD99B35E-9C2F-4335-AC0F-CA12EC61876C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE92204-551E-4400-B498-F9A15BA22165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE92204-551E-4400-B498-F9A15BA22165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE92204-551E-4400-B498-F9A15BA22165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE92204-551E-4400-B498-F9A15BA22165}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
