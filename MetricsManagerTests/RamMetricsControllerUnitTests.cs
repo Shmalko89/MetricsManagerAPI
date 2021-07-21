@@ -4,6 +4,8 @@ using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using MetricsManager.DAL.Repository;
+using AutoMapper;
 
 namespace MetricsManagerTests
 {
@@ -11,11 +13,14 @@ namespace MetricsManagerTests
     {
         private Mock<ILogger<RamMetricsController>> logger;
         private RamMetricsController controller;
+        private Mock<ManagerRamMetricsRepository> mock;
+        private IMapper mapper;
 
         public RamMetricsControllerUnitTests()
         {
+            mock = new Mock<ManagerRamMetricsRepository>();
             logger = new Mock<ILogger<RamMetricsController>>();
-            controller = new RamMetricsController(logger.Object);
+            controller = new RamMetricsController(logger.Object, mock.Object, mapper);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
