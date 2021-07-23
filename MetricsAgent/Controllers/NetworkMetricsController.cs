@@ -9,6 +9,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using MetricsAgent.MetricsRequest;
 using MetricsAgent.Responses;
+using AutoMapper;
 
 namespace MetricsAgent.Controllers
 {
@@ -18,18 +19,22 @@ namespace MetricsAgent.Controllers
     {
         private readonly INetworkMetricsRepository _repository;
         private readonly ILogger<NetworkMetricsController> _logger;
+        private readonly IMapper _mapper;
 
-        public NetworkMetricsController(ILogger<NetworkMetricsController> logger, INetworkMetricsRepository repository)
+        public NetworkMetricsController(ILogger<NetworkMetricsController> logger, INetworkMetricsRepository repository, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
+            _mapper = mapper;
         }
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetrics([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation("$Time: from {fromTime} to {toTime}");
-            var metrics = _repository.GetByTimePeriod(fromTime, toTime);
+
+            IList<NetworkMetrics> metrics = _repository.GetByTimePeriod(fromTime, toTime);
+
             var response = new AllNetworkMetricsResponse()
             {
                 Metrics = new List<NetworkMetricDto>()
@@ -37,7 +42,7 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new NetworkMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+                response.Metrics.Add(_mapper.Map<NetworkMetricDto>(metric));
             }
 
             return Ok(response);

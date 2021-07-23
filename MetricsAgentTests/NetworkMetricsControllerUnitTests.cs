@@ -7,6 +7,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.MetricsRequest;
+using AutoMapper;
 
 
 namespace MetricsManagerTests
@@ -16,12 +17,13 @@ namespace MetricsManagerTests
         private NetworkMetricsController controller;
         private Mock<INetworkMetricsRepository> mock;
         private Mock<ILogger<NetworkMetricsController>> logger;
+        private IMapper mapper;
 
         public NetworkMetricsControllerUnitTests()
         {
             mock = new Mock<INetworkMetricsRepository>();
             logger = new Mock<ILogger<NetworkMetricsController>>();
-            controller = new NetworkMetricsController(logger.Object, mock.Object);
+            controller = new NetworkMetricsController(logger.Object, mock.Object, mapper);
 
         }
         [Fact]

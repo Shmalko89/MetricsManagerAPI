@@ -4,6 +4,8 @@ using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using MetricsManager.DAL.Repository;
+using AutoMapper;
 
 namespace MetricsManagerTests
 {
@@ -11,11 +13,14 @@ namespace MetricsManagerTests
     {
         private Mock<ILogger<NetworkMetricsController>> logger;
         private NetworkMetricsController controller;
+        private Mock<ManagerNetworkMetricsRepository> mock;
+        private IMapper mapper;
 
         public NetworkMetricsControllerUnitTests()
         {
+            mock = new Mock<ManagerNetworkMetricsRepository>();
             logger = new Mock<ILogger<NetworkMetricsController>>();
-            controller = new NetworkMetricsController(logger.Object);
+            controller = new NetworkMetricsController(logger.Object, mock.Object, mapper);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()

@@ -4,6 +4,8 @@ using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using MetricsManager.DAL.Repository;
+using AutoMapper;
 
 namespace MetricsManagerTests
 {
@@ -11,11 +13,14 @@ namespace MetricsManagerTests
     {
         private Mock<ILogger<DotNetMetricsController>> logger;
         private DotNetMetricsController controller;
+        private Mock<ManagerDotNetMetricsRepository> mock;
+        private IMapper mapper;
 
         public DotNetMetricsControllerUnitTests()
         {
+            mock = new Mock<ManagerDotNetMetricsRepository>();
             logger = new Mock<ILogger<DotNetMetricsController>>();
-            controller = new DotNetMetricsController(logger.Object);
+            controller = new DotNetMetricsController(logger.Object, mock.Object, mapper);
         }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()

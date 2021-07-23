@@ -7,6 +7,7 @@ using MetricsAgent.Repository;
 using MetricsAgent.MetricsTable;
 using Microsoft.Extensions.Logging;
 using MetricsAgent.MetricsRequest;
+using AutoMapper;
 
 
 namespace MetricsManagerTests
@@ -16,12 +17,13 @@ namespace MetricsManagerTests
         private HddMetricsController controller;
         private Mock<IHddMetricsRepository> mock;
         private Mock<ILogger<HddMetricsController>> logger;
+        private IMapper mapper;
 
         public HddMetricsControllerUnitTests()
         {           
             mock = new Mock<IHddMetricsRepository>();
             logger = new Mock<ILogger<HddMetricsController>>();
-            controller = new HddMetricsController(logger.Object, mock.Object);
+            controller = new HddMetricsController(logger.Object, mock.Object, mapper);
 
         }
         [Fact]

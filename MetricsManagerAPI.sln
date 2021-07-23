@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "Metr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgentTests", "MetricsAgentTests\MetricsAgentTests.csproj", "{DD99B35E-9C2F-4335-AC0F-CA12EC61876C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82E64E15-F812-4086-AD32-761B5812A759}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
